@@ -8,42 +8,27 @@ Nonet::Nonet(void)
 	this->solved = false;
 }
 
-void Nonet::insertEntry(int nonet_row, int nonet_col, int value)
+void Nonet::insertEntry(int place, int value)
 {
-	if (nonet_row >= 0 && nonet_row < 3 && nonet_col >= 0 && nonet_col < 3)
+	if (place >= 0 && place < 9)
 	{
-		this->entries[nonet_row][nonet_col] = new Entry(value);
+		this->entries[place] = new Entry(value);
 	}
 	else 
 	{
-		if (nonet_row < 0 || nonet_row > 2)
-		{
-			cout << "Unexpected condition in Nonet::insertEntry: row = " << nonet_row << endl;
-		}
-		if (nonet_col < 0 || nonet_col > 2)
-		{
-			cout << "Unexpected condition in Nonet::insertEntry: col = " << nonet_col << endl;
-		}
+		cout << "Unexpected condition in Nonet::insertEntry: place = " << place << endl;
 	}
 }
 
-Entry* Nonet::getEntry(int nonet_row, int nonet_col)
+Entry* Nonet::getEntry(int place)
 {
-	if (nonet_row >= 0 && nonet_row < 3 && nonet_col >= 0 && nonet_col < 3)
+	if (place >= 0 && place < 9)
 	{
-		return this->entries[nonet_row][nonet_col];
+		return this->entries[place];
 	}
 	else 
 	{
-		if (nonet_row < 0 || nonet_row > 2)
-		{
-			cout << "Unexpected condition in Nonet::getEntry: row = " << nonet_row << endl;
-		}
-		if (nonet_col < 0 || nonet_col > 2)
-		{
-			cout << "Unexpected condition in Nonet::getEntry: col = " << nonet_col << endl;
-		}
-		
+		cout << "Unexpected condition in Nonet::getEntry: place = " << place << endl;
 		return NULL;
 	}
 }
@@ -52,7 +37,7 @@ bool Nonet::isSolved()
 {	
 	for (int i = 0; i < 9; i++)
 	{
-		if (this->entries[i / 3][i % 3]->getValue() == 0)
+		if (this->entries[i]->getValue() == 0)
 		{
 			return false;
 		}

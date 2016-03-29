@@ -4,11 +4,11 @@ class Nonet
 {
 	public:
 		Nonet(void);
-		void insertEntry(int nonet_row, int nonet_col, int value);
-		Entry* getEntry(int nonet_row, int nonet_col);
+		void insertEntry(int place, int value);
+		Entry* getEntry(int place);
 		bool isSolved();
 		
 	private:
-		Entry* entries[3][3];
+		Entry* entries[9];
 		bool solved;
 };

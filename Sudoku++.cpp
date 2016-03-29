@@ -12,11 +12,31 @@ int eightyOneGet(int row, int col, Nonet* nonets[9]);
 
 void eightyOneSet(int row, int col, Nonet* nonets[9], int value);
 
+void printPuzzle(Nonet* nonets[9]);
+
 
 
 int main(int argc, char* argv[])
 {
-	cout << "Hello!" << endl;
+	int i = 0;
+	Nonet* nonets[9];
+	
+	for (i = 0; i < 9; i++)
+	{
+		nonets[i] = new Nonet();
+	}
+	
+	if (argc > 1)
+	{
+		fileReader(argv[1], nonets);
+		printPuzzle(nonets);
+	}
+	else
+	{
+		cout << "No file specified." << endl;
+	}
+	
+	return 0;
 }
 
 void fileReader(char filename[], Nonet* nonets[9])
@@ -57,17 +77,31 @@ void fileReader(char filename[], Nonet* nonets[9])
 int eightyOneGet(int row, int col, Nonet* nonets[9])
 {
 	int non_r = row / 3;
+	int non_r2 = row % 3;
 	int non_c = col / 3;
 	int non_c2 = col % 3;
 	
-	return(nonets[3 * non_r + non_c]->getEntry(non_r, non_c2)->getValue());	
+	return(nonets[3 * non_r + non_c]->getEntry(3 * non_r2 + non_c2)->getValue());	
 }
 
 void eightyOneSet(int row, int col, Nonet* nonets[9], int value)
 {
 	int non_r = row / 3;
+	int non_r2 = row % 3;
 	int non_c = col / 3;
 	int non_c2 = col % 3;
 	
-	nonets[3 * non_r + non_c]->insertEntry(non_r, non_c2, value);	
+	nonets[3 * non_r + non_c]->insertEntry(3 * non_r2 + non_c2, value);	
+}
+
+void printPuzzle(Nonet* nonets[9])
+{
+	for (int i = 0; i < 81; i++)
+	{
+		if (i % 9 == 0)
+		{
+			cout << endl;
+		}
+		cout << eightyOneGet(i / 9, i % 9, nonets) << " ";
+	}
 }
