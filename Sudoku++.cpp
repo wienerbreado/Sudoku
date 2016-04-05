@@ -14,6 +14,10 @@ void eightyOneSet(int row, int col, Nonet* nonets[9], int value);
 
 void printPuzzle(Nonet* nonets[9]);
 
+void firstPass(Nonet* nonets[9]);
+
+void removeChoicesInNonet(Nonet* nonet);
+
 
 
 int main(int argc, char* argv[])
@@ -29,6 +33,15 @@ int main(int argc, char* argv[])
 	if (argc > 1)
 	{
 		fileReader(argv[1], nonets);
+		firstPass(nonets);
+		for (i = 0; i < 9; i++)
+		{
+			if (nonets[0]->getEntry(4)->isPossible(i))
+			{
+				cout << i + 1;
+			}
+		}
+		cout << endl;
 		printPuzzle(nonets);
 	}
 	else
@@ -66,14 +79,6 @@ void fileReader(char filename[], Nonet* nonets[9])
 	}
 }
 
-/* void fillPossibleSpaces (Nonet nonet)
-{
-	for (int i = 0; i < 9; i++)
-	{
-		
-	}
-} */
-
 int eightyOneGet(int row, int col, Nonet* nonets[9])
 {
 	int non_r = row / 3;
@@ -103,5 +108,33 @@ void printPuzzle(Nonet* nonets[9])
 			cout << endl;
 		}
 		cout << eightyOneGet(i / 9, i % 9, nonets) << " ";
+	}
+}
+
+void firstPass(Nonet* nonets[9])
+{
+	for (int i = 0; i < 9; i++)
+	{
+		removeChoicesInNonet(nonets[i]);
+	}
+}
+
+void removeChoicesInNonet(Nonet* nonet)
+{
+	int x = 0;
+	
+	for (int i = 0; i < 9; i++)
+	{
+		if (nonet->getEntry(i)->getValue() == 0)
+		{
+			for (int j = 0; j < 9; j++)
+			{
+				x = nonet->getEntry(j)->getValue();
+				if (x != 0)
+				{
+					nonet->getEntry(i)->changePossible(x - 1);
+				}
+			}
+		}
 	}
 }
