@@ -27,23 +27,26 @@ void Entry::changePossible(int number)
 {
 	int x = 0, y = 0;
 	
-	if (number >= 0 && number < 9 && !this->solved)
+	if (!this->solved && number >= 0 && number < 9)
 	{
-		this->possible[number] = 0;
-		
-		for (int i = 0; i < 9; i++)
+		if (this->possible[number] != 0)
 		{
-			if (this->possible[i] == 1)
+			this->possible[number] = 0;
+			
+			for (int i = 0; i < 9; i++)
 			{
-				x++;
-				y = i;
+				if (this->possible[i] == 1)
+				{
+					x++;
+					y = i;
+				}
 			}
-		}
-		
-		if (x == 1)
-		{
-			this->solved = true;
-			this->value = y + 1;
+			
+			if (x == 1)
+			{
+				this->solved = true;
+				this->value = y + 1;
+			}
 		}
 	}
 	else
