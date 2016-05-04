@@ -20,6 +20,8 @@ void removeChoicesInNonet(Nonet* nonet);
 
 Entry* decodeEntry(int row, int col, Nonet* nonets[9]);
 
+void alanPalomo(Nonet* nonets[9]);
+
 int main(int argc, char* argv[])
 {
 	int i = 0;
@@ -33,8 +35,10 @@ int main(int argc, char* argv[])
 	if (argc > 1)
 	{
 		fileReader(argv[1], nonets);
+		printPuzzle(nonets);
 		firstPass(nonets);
-		////////////////////////////////
+		/////////////////////////////////
+		/*
 		for (i = 0; i < 9; i++)
 		{
 			if (nonets[0]->getEntry(4)->isPossible(i))
@@ -43,7 +47,9 @@ int main(int argc, char* argv[])
 			}
 		}
 		cout << endl;
-		///////////////////////////////
+		*///////////////////////////////
+		printPuzzle(nonets);
+		firstPass(nonets);
 		printPuzzle(nonets);
 	}
 	else
@@ -83,12 +89,7 @@ void fileReader(char filename[], Nonet* nonets[9])
 
 int eightyOneGet(int row, int col, Nonet* nonets[9])
 {
-	int non_r = row / 3;
-	int non_r2 = row % 3;
-	int non_c = col / 3;
-	int non_c2 = col % 3;
-	
-	return (nonets[3 * non_r + non_c]->getEntry(3 * non_r2 + non_c2)->getValue());	
+	return decodeEntry(row, col, nonets)->getValue();	
 }
 
 Entry* decodeEntry(int row, int col, Nonet* nonets[9])
@@ -108,7 +109,7 @@ void eightyOneSet(int row, int col, Nonet* nonets[9], int value)
 	int non_c = col / 3;
 	int non_c2 = col % 3;
 	
-	nonets[3 * non_r + non_c]->insertEntry(3 * non_r2 + non_c2, value);	
+	nonets[3 * non_r + non_c]->insertEntry(3 * non_r2 + non_c2, value);
 }
 
 void printPuzzle(Nonet* nonets[9])
@@ -121,6 +122,7 @@ void printPuzzle(Nonet* nonets[9])
 		}
 		cout << eightyOneGet(i / 9, i % 9, nonets) << " ";
 	}
+	cout << endl;
 }
 
 void firstPass(Nonet* nonets[9])
@@ -152,22 +154,37 @@ void removeChoicesInNonet(Nonet* nonet)
 	}
 }
 
-void alanPalomo(Nonet* nonets[9])
-{
-	int row = 0, col = 0, joint[] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-	for (int i = 0; i < 9; i++)
+void alanPalomo(Nonet* nonets[9])
+{	
+	Entry *x, *y, *z = NULL;
+	int value = 0;
+	
+	for (int j = 0; j < 9; j++)
 	{
-		row = eightyOneGet(0, i, nonets);
-		col = eightyOneGet(i, 0, nonets);
-		if (row > 0)
-		{
-			joint[row - 1] = 0;
-		} 
-		if (col > 0)
-		{
-			joint[col - 1] = 0;
+		for (int k = 0; k < 9; k++)
+		{	
+			z = decodeEntry(j, k, nonets);
+			
+			if (z->isSolved())
+			{
+				value = z->getValue();
+				for (int i = 0; i < 9; i++)
+				{
+					x = decodeEntry(i, k, nonets);
+					y = decodeEntry(j, i, nonets);
+					
+					if (x != NULL && !x->isSolved())
+					{
+						x->changePossible(value - 1);
+					}
+					if (y != NULL && !y->isSolved())
+					{
+						y->changePossible(value - 1);
+					}
+				}
+			}
 		}
 	}
-
+	
 }

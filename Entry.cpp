@@ -51,7 +51,7 @@ void Entry::changePossible(int number)
 	}
 	else
 	{
-		cout << "Unexpected condition in Entry::changePossible: " << number << endl;
+		cout << "Unexpected condition in Entry::changePossible: " << this->solved << " " << number << endl;
 	}
 }
 
