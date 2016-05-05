@@ -10,5 +10,4 @@ class Nonet
 		
 	private:
 		Entry* entries[9];
-		bool solved;
 };

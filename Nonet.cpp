@@ -5,7 +5,6 @@ using namespace std;
 
 Nonet::Nonet(void)
 {
-	this->solved = false;
 	for (int i = 0; i < 9; i++)
 	{
 		this->entries[i] = NULL;
@@ -14,27 +13,9 @@ Nonet::Nonet(void)
 
 void Nonet::insertEntry(int place, int value)
 {
-	int i = 0;
-	bool check = true;
-
-	if (!this->solved && place >= 0 && place < 9)
+	if (place >= 0 && place < 9)
 	{
 		this->entries[place] = new Entry(value);
-
-		while (check && i < 9)
-		{
-			if (this->entries[i] == NULL)
-			{
-				check = false;
-			}
-			else
-			{
-				check = this->entries[i]->isSolved();
-				i++;
-			}
-		}
-
-		this->solved = (i == 9);
 	}
 	else 
 	{
@@ -54,8 +35,16 @@ Entry* Nonet::getEntry(int place)
 		return NULL;
 	}
 }
-
+	
 bool Nonet::isSolved()
 {	
-	return this->solved;
+	for (int i = 0; i < 9; i++)
+	{
+		if (!this->entries[i]->isSolved())
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

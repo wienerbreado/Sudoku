@@ -22,6 +22,8 @@ Entry* decodeEntry(int row, int col, Nonet* nonets[9]);
 
 void alanPalomo(Nonet* nonets[9]);
 
+bool isSolved(Nonet *nonets[9]);
+
 int main(int argc, char* argv[])
 {
 	int i = 0;
@@ -36,7 +38,6 @@ int main(int argc, char* argv[])
 	{
 		fileReader(argv[1], nonets);
 		printPuzzle(nonets);
-		firstPass(nonets);
 		/////////////////////////////////
 		/*
 		for (i = 0; i < 9; i++)
@@ -48,9 +49,13 @@ int main(int argc, char* argv[])
 		}
 		cout << endl;
 		*///////////////////////////////
-		printPuzzle(nonets);
-		firstPass(nonets);
-		printPuzzle(nonets);
+		i = 0;
+		while (!isSolved(nonets) && i < 81)
+		{
+			alanPalomo(nonets);
+			printPuzzle(nonets);
+			i++;
+		}
 	}
 	else
 	{
@@ -114,13 +119,25 @@ void eightyOneSet(int row, int col, Nonet* nonets[9], int value)
 
 void printPuzzle(Nonet* nonets[9])
 {
+	int x = 0;
+	
 	for (int i = 0; i < 81; i++)
 	{
 		if (i % 9 == 0)
 		{
 			cout << endl;
 		}
-		cout << eightyOneGet(i / 9, i % 9, nonets) << " ";
+		
+		x = eightyOneGet(i / 9, i % 9, nonets);
+		
+		if (x)
+		{
+			cout << x << " ";
+		}
+		else
+		{
+			cout << "_ ";
+		}
 	}
 	cout << endl;
 }
@@ -136,19 +153,19 @@ void firstPass(Nonet* nonets[9])
 
 void removeChoicesInNonet(Nonet* nonet)
 {
+	Entry *y;
 	int x = 0;
 	
 	for (int i = 0; i < 9; i++)
 	{
-		if (!nonet->getEntry(i)->isSolved())
+		y = nonet->getEntry(i);
+		
+		for (int j = 0; j < 9 && !y->isSolved(); j++)
 		{
-			for (int j = 0; j < 9; j++)
+			x = nonet->getEntry(j)->getValue();
+			if (x != 0)
 			{
-				x = nonet->getEntry(j)->getValue();
-				if (x != 0)
-				{
-					nonet->getEntry(i)->changePossible(x - 1);
-				}
+				nonet->getEntry(i)->changePossible(x - 1);
 			}
 		}
 	}
@@ -186,5 +203,17 @@ void alanPalomo(Nonet* nonets[9])
 			}
 		}
 	}
+}
+
+bool isSolved(Nonet *nonets[9])
+{
+	for (int i = 0; i < 9; i++)
+	{
+		if (!nonets[i]->isSolved())
+		{
+			return false;
+		}
+	}
 	
+	return true;
 }
