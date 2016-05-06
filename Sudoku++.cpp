@@ -14,7 +14,7 @@ void eightyOneSet(int row, int col, Nonet* nonets[9], int value);
 
 void printPuzzle(Nonet* nonets[9]);
 
-void firstPass(Nonet* nonets[9]);
+void pass(Nonet* nonets[9]);
 
 void removeChoicesInNonet(Nonet* nonet);
 
@@ -38,21 +38,11 @@ int main(int argc, char* argv[])
 	{
 		fileReader(argv[1], nonets);
 		printPuzzle(nonets);
-		/////////////////////////////////
-		/*
-		for (i = 0; i < 9; i++)
-		{
-			if (nonets[0]->getEntry(4)->isPossible(i))
-			{
-				cout << i + 1;
-			}
-		}
-		cout << endl;
-		*///////////////////////////////
+		
 		i = 0;
 		while (!isSolved(nonets) && i < 81)
 		{
-			alanPalomo(nonets);
+			pass(nonets);
 			printPuzzle(nonets);
 			i++;
 		}
@@ -142,33 +132,14 @@ void printPuzzle(Nonet* nonets[9])
 	cout << endl;
 }
 
-void firstPass(Nonet* nonets[9])
+void pass(Nonet* nonets[9])
 {
 	for (int i = 0; i < 9; i++)
 	{
-		removeChoicesInNonet(nonets[i]);
+		nonets[i]->removeChoices();
+	//	nonets[i]->checkForLonersAndSolveThemIfTheyExist();
 	}
 	alanPalomo(nonets);
-}
-
-void removeChoicesInNonet(Nonet* nonet)
-{
-	Entry *y;
-	int x = 0;
-	
-	for (int i = 0; i < 9; i++)
-	{
-		y = nonet->getEntry(i);
-		
-		for (int j = 0; j < 9 && !y->isSolved(); j++)
-		{
-			x = nonet->getEntry(j)->getValue();
-			if (x != 0)
-			{
-				nonet->getEntry(i)->changePossible(x - 1);
-			}
-		}
-	}
 }
 
 

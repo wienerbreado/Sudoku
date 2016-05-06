@@ -11,6 +11,7 @@ Nonet::Nonet(void)
 	}
 }
 
+
 void Nonet::insertEntry(int place, int value)
 {
 	if (place >= 0 && place < 9)
@@ -22,6 +23,7 @@ void Nonet::insertEntry(int place, int value)
 		cout << "Unexpected condition in Nonet::insertEntry: place = " << place << endl;
 	}
 }
+
 
 Entry* Nonet::getEntry(int place)
 {
@@ -35,6 +37,57 @@ Entry* Nonet::getEntry(int place)
 		return NULL;
 	}
 }
+
+
+void Nonet::checkForLonersAndSolveThemIfTheyExist()
+{
+	int counter, placeholder, number;
+	
+	for (int i = 0; i < 9; i++)
+	{
+		counter = 0;
+		for (int j = 0; j < 9; j++)
+		{
+			if(this->entries[j]->isPossible(i))
+			{
+				counter++;
+				if (counter > 1)
+				{
+					j = 10;
+				}
+				placeholder = j;
+				number = i;
+			}
+		}
+		
+		if (counter == 1)
+		{
+			this->entries[placeholder] = new Entry(number);
+		}
+	}
+}
+
+
+void Nonet::removeChoices()
+{
+	Entry *y;
+	int x = 0;
+	
+	for (int i = 0; i < 9; i++)
+	{
+		y = this->getEntry(i);
+		
+		for (int j = 0; j < 9 && !y->isSolved(); j++)
+		{
+			x = this->getEntry(j)->getValue();
+			if (x != 0)
+			{
+				this->getEntry(i)->changePossible(x - 1);
+			}
+		}
+	}
+}
+
 	
 bool Nonet::isSolved()
 {	
